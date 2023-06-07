@@ -24,11 +24,11 @@
 		<sonar.sources>src/main/java</sonar.sources>
 		<sonar.language>java</sonar.language>
 		<sonar.inclusions>
-			**/com/example/springbootasg/controller/**,
-			**/com/example/springbootasg/dto/**,
-			**/com/example/springbootasg/model/**,
-			**/com/example/springbootasg/repository/**,
-			**/com/example/springbootasg/service/**,
+			**/com/example/assignspring/controller/**,
+			**/com/example/assignspring/dto/**,
+			**/com/example/assignspring/model/**,
+			**/com/example/assignspring/repository/**,
+			**/com/example/assignspring/service/**,
 		</sonar.inclusions>
 	</properties>
 	<dependencies>
@@ -94,11 +94,11 @@
 				<version>0.8.10</version>
 				<configuration>
 					<includes>
-						<include>com/example/springbootasg/controller/**</include>
-						<include>com/example/springbootasg/service/**</include>
-						<include>com/example/springbootasg/dto/**</include>
-						<include>com/example/springbootasg/model/**</include>
-						<include>com/example/springbootasg/repository/**</include>
+						<include>com/example/assignspring/controller/**</include>
+						<include>com/example/assignspring/service/**</include>
+						<include>com/example/assignspring/dto/**</include>
+						<include>com/example/assignspring/model/**</include>
+						<include>com/example/assignspring/repository/**</include>
 					</includes>
 				</configuration>
 				<executions>
