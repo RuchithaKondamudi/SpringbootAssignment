@@ -51,17 +51,28 @@ public class BookService {
     }
 
     @Transactional
-    public void updateBook(Long bookId, String name, String price) {
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalStateException("No such book found"));
-        if (name != null && name.length() > 0 && !Objects.equals(name, book.getName())) {
+    public void updateBook(Long bookId, BookDto bookDto) {
+        String name= bookDto.getName();
+        String price= bookDto.getPrice();
+        Book book =bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalStateException("No such phone found"));
+
+        boolean isNameChanged =   !Objects.equals(name,book.getName());
+        boolean isPriceChanged =  !Objects.equals(price, book.getPrice());
+
+        if (isNameChanged) {
             book.setName(name);
         }
-        if (price != null && price.length() > 0 && !Objects.equals(price,book.getPrice())) {
+
+        if (isPriceChanged) {
             book.setPrice(price);
         }
 
-        log.info("updating");
-        bookRepository.save(book);
-        log.info("updated successfully");
+        if (isNameChanged || isPriceChanged) {
+            log.info("Updating...........");
+            bookRepository.save(book);
+            log.info("Updated successfully.........");
+        }
     }
+
 }

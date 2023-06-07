@@ -6,6 +6,8 @@ import com.example.assignspring.repository.BookRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,22 +70,70 @@ import static org.mockito.Mockito.*;
             verify(bookRepository, times(1)).findById(1L);
             Assertions.assertEquals(1, booksList.size());
         }
-        @Test
-        @DisplayName("Successfully Updates a Book")
-        void testUpdateBook() {
-            // given
-            BookRepository bookRepository = mock(BookRepository.class);
-             Book existingBook = new Book("The Greatest Secret", "515");
-            Book updatedBook = new Book("The Greatest Secret updated", "203");
-            given(bookRepository.findById(1L)).willReturn(Optional.of(existingBook));
-            given(bookRepository.save(any(Book.class))).willReturn(updatedBook);
-           BookService bookService = new BookService(bookRepository);
-            // when
-            bookService.updateBook(1L, "The Greatest Secret updated", "700");
-            //then
-            verify(bookRepository, times(1)).findById(1L);
-            verify(bookRepository, times(1)).save(any(Book.class));
-        }
+     @ParameterizedTest
+     @DisplayName("Update Book ")
+     @CsvSource({
+             "'The Greatest Secret', '515'"
+     })
+     void testUpdatePhones1(String name, String price) {
+         // Given
+         BookRepository bookRepository = mock(BookRepository.class);
+         Book existingBook = new Book("The Greatest Secret", "515");
+         given(bookRepository.findById(1L)).willReturn(Optional.of(existingBook));
+         BookService bookService = new BookService(bookRepository);
+        BookDto book = new BookDto(name, price, 1L);
+         // When
+         bookService.updateBook(1L, book);
+         // Then
+         verify(bookRepository, times(1)).findById(1L);
+         verify(bookRepository, never()).save(any(Book.class));
+     }
+
+     @ParameterizedTest
+     @DisplayName("Update Book Test Cases-2")
+     @CsvSource({
+             "null, null",                   // No changes
+             "null, '1000'",                  // Only price changed
+             "' The Greatest Secret', null",      // Only name changed
+             "'The Greatest Secret', '1000'",     // Both name and price changed
+             "'The Greatest Secret', null",              // Name same as existing, only price changed
+             "null, '515'",                  // Price same as existing, only name changed
+             "'The Greatest Secret updated', '25k'",     // Only name changed, price same as existing
+             "'The Greatest Secret', '1000'",              // Only price changed, name same as existing
+             "'', '1000'",                     // Empty name, only price changed
+             "'The Greatest Secret updated', ''",      // Only name changed, empty price
+             "'', 'null'",
+             "null, ''",
+             "'', ''",
+             "'The Greatest Secret', ''",                 // Name same as existing, empty price
+             "'', '1000'",                     // Empty name, price same as existing
+     })
+     void testUpdatePhones2(String name, String price) {
+         // given
+         BookRepository bookRepository = mock(BookRepository.class);
+        Book existingBook = new Book("samsung", "25k");
+         Book updatedBook = new Book();
+         updatedBook.setName(name);
+         updatedBook.setPrice(price);
+         given(bookRepository.findById(1L)).willReturn(Optional.of(existingBook));
+         given(bookRepository.save(any(Book.class))).willReturn(updatedBook);
+         System.out.println(updatedBook.getName());
+         System.out.println(existingBook.getName());
+         System.out.println(updatedBook);
+         System.out.println(existingBook);
+         BookService bookService = new BookService(bookRepository);
+        BookDto book = new BookDto(name, price, 1L);
+         // when
+         bookService.updateBook(1L, book);
+         System.out.println();
+         // then
+         verify(bookRepository, times(1)).findById(1L);
+         if (!existingBook.equals(updatedBook)) {
+             verify(bookRepository, times(1)).save(any(Book.class));
+         } else {
+             verify(bookRepository, never()).save(any(Book.class));
+         }
+     }
 
         @Test
         @DisplayName("Adds a Book")

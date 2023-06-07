@@ -124,34 +124,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     void testDeleteBook() throws Exception {
 
         Long id = 1L;
-
-
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/books/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-
         verify(bookService, times(1)).deleteBook(id);
     }
 
-    @Test
-    @DisplayName("Test PUT /api/v1/books/{id}")
-    void testUpdateBook() throws Exception {
+     @Test
+     @DisplayName("Test PUT /api/v1/books/{id}")
+     void testUpdateBook() throws Exception {
 
-        Long id = 1L;
-        String name = "Updated The Greatest Secret";
-        String price = "700";
+         Long id = 1L;
+         String name = "Updated The Greatest Secret";
+         String price = "1000";
 
+         BookDto expectedBook = new BookDto(price, name, id);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/books/{id}", id)
-                        .param("name", name)
-                        .param("price", price)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+         ArgumentCaptor<Long> idCaptor = ArgumentCaptor.forClass(Long.class);
+         ArgumentCaptor<BookDto> bookCaptor = ArgumentCaptor.forClass(BookDto.class);
 
 
-        verify(bookService, times(1)).updateBook(id, name, price);
-    }
+         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/books/{id}", id)
+                         .contentType(MediaType.APPLICATION_JSON)
+                         .content(asJsonString(expectedBook)))
+                 .andExpect(status().isOk());
 
 
-}
+         verify(bookService, times(1)).updateBook(idCaptor.capture(), bookCaptor.capture());
+
+         Long capturedId = idCaptor.getValue();
+         BookDto capturedBook = bookCaptor.getValue();
+
+         assertEquals(id, capturedId);
+         assertEquals(expectedBook.getName(), capturedBook.getName());
+         assertEquals(expectedBook.getPrice(), capturedBook.getPrice());
+         assertEquals(expectedBook.getId(), capturedBook.getId());
+     }
+
+
+
+ }

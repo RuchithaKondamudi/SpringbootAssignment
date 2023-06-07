@@ -43,11 +43,10 @@ public class BookController {
         return "Book Deleted";
     }
     @PutMapping("/{id}")
-    public String updateBook(@PathVariable Long id,@RequestParam(required = false) String name,@RequestParam(required = false) String price
-    ){
+    public String updateStudent(@PathVariable Long id,@RequestBody BookDto book){
 
-        bookService.updateBook(id,name,price);
-        return "Book Data Updated";
+        bookService.updateBook(id,book);
+        return "Phone Data Updated";
     }
 }
 
