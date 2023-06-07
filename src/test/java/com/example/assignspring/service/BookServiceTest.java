@@ -75,7 +75,7 @@ import static org.mockito.Mockito.*;
      @CsvSource({
              "'The Greatest Secret', '515'"
      })
-     void testUpdatePhones1(String name, String price) {
+     void testUpdateBooks1(String name, String price) {
          // Given
          BookRepository bookRepository = mock(BookRepository.class);
          Book existingBook = new Book("The Greatest Secret", "515");
@@ -108,10 +108,10 @@ import static org.mockito.Mockito.*;
              "'The Greatest Secret', ''",                 // Name same as existing, empty price
              "'', '1000'",                     // Empty name, price same as existing
      })
-     void testUpdatePhones2(String name, String price) {
+     void testUpdateBooks2(String name, String price) {
          // given
          BookRepository bookRepository = mock(BookRepository.class);
-        Book existingBook = new Book("samsung", "25k");
+        Book existingBook = new Book("The Greatest Secret", "515");
          Book updatedBook = new Book();
          updatedBook.setName(name);
          updatedBook.setPrice(price);

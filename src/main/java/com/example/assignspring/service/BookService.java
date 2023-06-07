@@ -55,7 +55,7 @@ public class BookService {
         String name= bookDto.getName();
         String price= bookDto.getPrice();
         Book book =bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalStateException("No such phone found"));
+                .orElseThrow(() -> new IllegalStateException("No such book found"));
 
         boolean isNameChanged =   !Objects.equals(name,book.getName());
         boolean isPriceChanged =  !Objects.equals(price, book.getPrice());
